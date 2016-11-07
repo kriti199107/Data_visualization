@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<html>
+    <head>
+
+        <script src="//d3js.org/d3.v3.min.js"></script>
+        <script src="http://dimplejs.org/dist/dimple.v2.2.0.min.js"></script>
+
+    </head>
+    <body>
+
+        <div id="chartContainer"></div>
+        <button id="Class">Class</button>
+        <button id="Sex">Sex</button>
+        <button id="Age">Age</button>
+        
+        
+        <script type="text/javascript">
+// The frame duration for the animation in milliseconds
+          var frame = 500;
+    
+var title = d3.select("body").append("h3")
+      .text("Titanic Disaster: Different factors that affected survival")
+.append("h3")
+      .text("Rich, Children and Women survived more!!")
+      .append("h6")
+      .text(" Click on Class, Sex and Age buttons above to see how they affect the survivor demographic");
+var svg1 = dimple.newSvg("body", 590, 400);
+var svg2 = dimple.newSvg("body", 590, 400);
+
+
+d3.select("#Class").on("click", function() {
+
+svg1.selectAll("*").remove();
+svg2.selectAll("*").remove();
+
+         //var svg1 = dimple.newSvg("#chartContainer", 590, 400);
+
+        d3.csv("titanic_data.csv", function (error, data) {
+            // Create a column of 1s
+            data.forEach(function(d) {
+                d.Count = 1;
+                d.Survived = ( d.Survived != "" && d.Survived == 1 ?
+                            "Survived" : "Died");
+                        });
+            // data = dimple.filterData(data, "Survived", "0");
+            var myChart = new dimple.chart(svg1, data);
+            myChart.setBounds(75, 30, 480, 330);
+            var xAxis = myChart.addCategoryAxis("x", "Pclass");
+xAxis.title = "Passenger class";
+            // myChart.addPctAxis("y","Count");
+           var myAxisy = myChart.addMeasureAxis("y","Count");
+myAxisy.title = "Count of passengers in each class";
+            myChart.addSeries("Survived", dimple.plot.bar);
+            
+            myChart.addLegend(200, 10, 380, 20, "right");
+            myChart.draw(frame);
+            
+            });
+
+
+
+
+   
+//var svg2 = dimple.newSvg("body", 590, 400);
+
+        d3.csv("titanic_data.csv", function (error, data) {
+            // Create a column of 1s
+            data.forEach(function(d) {
+                d.Count = 1;
+d.Survived = ( d.Survived != "" && d.Survived == 1 ?
+                            "Survived" : "Died");
+                        });
+            // data = dimple.filterData(data, "Survived", "0");
+            var myChart = new dimple.chart(svg2, data);
+            myChart.setBounds(75, 30, 480, 330);
+            var xAxis = myChart.addCategoryAxis("x", ["Pclass", "Survived"]);
+            // myChart.addPctAxis("y","Count");
+            myAxisy=myChart.addMeasureAxis("y","Count");
+            myChart.addSeries("Survived", dimple.plot.bar);
+xAxis.title = "Died(Left in Blue) vs Survived(Right in pink) in each passenger class";
+myAxisy.title = "Count of passengers";
+            
+            myChart.addLegend(200, 10, 380, 20, "right");
+            myChart.draw(frame);
+            });
+
+
+
+});
+
+
+
+d3.select("#Sex").on("click", function() {
+
+svg1.selectAll("*").remove();
+svg2.selectAll("*").remove();
+
+
+
+
+//var svg1 = dimple.newSvg("body", 590, 400);
+    d3.csv("titanic_data.csv", function (error, data){
+
+      //data = dimple.filterData(data, "Sex", ["female"])
+      var myChart = new dimple.chart(svg1, data);
+      myChart.setBounds(75, 30, 480, 330);
+      var xAxis = myChart.addCategoryAxis("x", "Pclass");
+      //xAxis.addOrderRule("");
+      myAxisy=myChart.addPctAxis("y", "Survived");
+      myChart.addSeries("Sex", dimple.plot.bar);
+xAxis.title = "Passenger class";
+myAxisy.title = "Per cent of male and female survivors";
+      myChart.addLegend(65, 10, 510, 20, "right");
+      myChart.draw(frame);      
+    });
+
+
+
+
+
+//var svg2 = dimple.newSvg("body", 590, 400);
+        d3.csv("titanic_data.csv", function (error, data) {
+            // Create a column of 1s
+            data.forEach(function(d) {
+                return d.Count = 1;
+                        });
+            // data = dimple.filterData(data, "Survived", "0");
+            var myChart = new dimple.chart(svg2, data);
+            myChart.setBounds(75, 30, 480, 330);
+            var xAxis = myChart.addCategoryAxis("x", ["Pclass", "Survived"]);
+            // myChart.addPctAxis("y","Count");
+            myAxisy=myChart.addMeasureAxis("y","Count");
+            myChart.addSeries("Sex", dimple.plot.bar);
+xAxis.title = "Male vs female survival in each class";
+myAxisy.title = "Per cent of male and female survivors";
+            myChart.addLegend(200, 10, 380, 20, "right");
+            
+
+            myChart.draw(frame);
+            });
+
+
+});
+
+
+d3.select("#Age").on("click", function() {
+
+svg1.selectAll("*").remove();
+svg2.selectAll("*").remove();
+
+
+//var svg1 = dimple.newSvg("body", 590, 400);
+        d3.csv("titanic_data.csv", function (error, data) {
+            // age
+            data.forEach(function(d) {
+               d.count=1; 
+               d.AgeGroup = ( d.Age != "" && d.Age < 18 ?
+                            "Child (Age < 18)" : "Adult");
+                
+
+                d.Survived = ( d.Survived != "" && d.Survived == 1 ?
+                            "Survived" : "Died");
+return d;
+                        
+                        });
+ 
+            // data = dimple.filterData(data, "Survived", "0");
+            var myChart = new dimple.chart(svg1, data);
+            myChart.setBounds(75, 30, 480, 330);
+            var xAxis = myChart.addCategoryAxis("x", "AgeGroup");
+            
+            myChart.addMeasureAxis("y","count");
+            myChart.addSeries("Survived", dimple.plot.bar);
+            myChart.addLegend(200, 10, 380, 20, "right");
+            
+            myChart.draw(frame);
+            });
+
+
+
+
+//var svg2 = dimple.newSvg("body", 590, 400);
+        d3.csv("titanic_data.csv", function (error, data) {
+            // age
+            data.forEach(function(d) {
+               d.count=1; 
+               d.AgeGroup = ( d.Age != "" && d.Age < 18 ?
+                            "Child (Age < 18)" : "Adult");
+d.Survived = ( d.Survived != "" && d.Survived == 1 ?
+                            "Survived" : "Died");
+                return d;
+                        });
+ 
+            // data = dimple.filterData(data, "Survived", "0");
+            var myChart = new dimple.chart(svg2, data);
+            myChart.setBounds(75, 30, 480, 330);
+            var xAxis = myChart.addCategoryAxis("x", ["AgeGroup", "Survived"]);
+            
+            myChart.addMeasureAxis("y","count");
+            myChart.addSeries("Survived", dimple.plot.bar);
+            myChart.addLegend(200, 10, 380, 20, "right");
+            
+            myChart.draw(frame);
+            });
+
+
+});
+
+
+        </script>
+
+    </body>
+</html>

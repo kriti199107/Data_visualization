@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<html>
+    <head>
+
+        <script src="//d3js.org/d3.v3.min.js"></script>
+        <script src="http://dimplejs.org/dist/dimple.v2.2.0.min.js"></script>
+
+    </head>
+    <body>
+
+        <div id="chartContainer"></div>
+     
+        <button id="Class">Class</button>
+        <button id="Sex">Sex</button>
+        <button id="Age">Age</button>
+        
+        
+        <script type="text/javascript">
+// The frame duration for the animation in milliseconds
+          var frame = 500;
+
+//Add title and comments    
+var title = d3.select("body").append("h3")
+      .text("Titanic Disaster: Different factors that affected survival")
+      .append("h3")
+      .text("Rich, Children and Women survived more!!")
+      .append("h6")
+      .text(" Click on Class, Sex and Age buttons above to see how they affect the survivor demographic");
+
+// select a body on the webpage to display chart
+var svg1 = dimple.newSvg("body", 590, 400);
+
+
+//function for showing the webpage for class on clicking class button
+
+d3.select("#Class").on("click", function() {
+
+svg1.selectAll("*").remove(); //remove all elements from svg to add new charts 
+
+
+         //var svg1 = dimple.newSvg("#chartContainer", 590, 400);
+
+        d3.csv("titanic_data.csv", function (error, data) {
+            // Create a column of 1s
+            data.forEach(function(d) {
+                d.Count = 1;
+                d.Survived = ( d.Survived != "" && d.Survived == 1 ?
+                            "Survived" : "Died");// divide survived and died
+                        });
+           
+            var myChart = new dimple.chart(svg1, data);
+            myChart.setBounds(75, 30, 480, 330);
+            var xAxis = myChart.addCategoryAxis("x", "Pclass");
+            xAxis.title = "Passenger class";
+            // myChart.addPctAxis("y","Count");
+            myAxisy=myChart.addPctAxis("y", "Count");
+            myAxisy.title = "Per cent of passengers that survived in each class";
+            myChart.addSeries("Survived", dimple.plot.bar);
+            
+            myChart.addLegend(200, 10, 380, 20, "right");
+            myChart.draw(frame);
+            
+            });
+
+}); // end class function
+
+
+//function for showing the webpage for class on clicking Sex button
+
+d3.select("#Sex").on("click", function() {
+
+svg1.selectAll("*").remove();
+
+    d3.csv("titanic_data.csv", function (error, data){
+
+      //data = dimple.filterData(data, "Sex", ["female"])
+      var myChart = new dimple.chart(svg1, data);
+      myChart.setBounds(75, 30, 480, 330);
+      var xAxis = myChart.addCategoryAxis("x", "Pclass");
+      //xAxis.addOrderRule("");
+      myAxisy=myChart.addPctAxis("y", "Survived");
+      myChart.addSeries("Sex", dimple.plot.bar);
+      xAxis.title = "Passenger class";
+      myAxisy.title = "Per cent of male and female survivors";
+      myChart.addLegend(65, 10, 510, 20, "right");
+      myChart.draw(frame);      
+    });
+
+});// end Sex function
+
+
+//function for showing the webpage for class on clicking Sex button
+
+d3.select("#Age").on("click", function() {
+
+svg1.selectAll("*").remove();
+
+        d3.csv("titanic_data.csv", function (error, data) {
+            // age
+            data.forEach(function(d) {
+               d.count=1; 
+               d.AgeGroup = ( d.Age != "" && d.Age < 18 ?
+                            "Child (Age < 18)" : "Adult");
+               // divide the passengers between two agegroups: Adults(>18 yrs 
+               //  and children (<18 years)
+                
+
+                d.Survived = ( d.Survived != "" && d.Survived == 1 ?
+                            "Survived" : "Died");
+            return d;
+                        
+                        });
+ 
+            // data = dimple.filterData(data, "Survived", "0");
+            var myChart = new dimple.chart(svg1, data);
+            myChart.setBounds(75, 30, 480, 330);
+            var xAxis = myChart.addCategoryAxis("x", "AgeGroup");
+            
+            var yAxis= myChart.addPctAxis("y","count");
+            myChart.addSeries("Survived", dimple.plot.bar);
+            xAxis.title = "Passenger class";
+            yAxis.title = "Per cent of survivors in different age groups";
+            myChart.addLegend(200, 10, 380, 20, "right");
+            
+            myChart.draw(frame);
+            });
+
+}); // end age function
+
+
+        </script>
+
+    </body>
+</html>

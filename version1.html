@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<html>
+    <head>
+
+        <script src="//d3js.org/d3.v3.min.js"></script>
+        <script src="http://dimplejs.org/dist/dimple.v2.2.0.min.js"></script>
+
+    </head>
+    <body>
+        <div id="chartContainer"></div>
+        <script type="text/javascript">
+
+var title = d3.select("body").append("h3")
+      .text("Titanic Disaster: Different factors that affected survival")
+      .append("h6")
+      .text("(Passenger class a factor? : ratio of number of people that survived (pink) to those who did not survive (blue) in each class)");
+
+
+         var svg2 = dimple.newSvg("body", 590, 400);
+
+        d3.csv("titanic_data.csv", function (error, data) {
+            // Create a column of 1s
+            data.forEach(function(d) {
+                return d.Count = 1;
+                        });
+            // data = dimple.filterData(data, "Survived", "0");
+            var myChart = new dimple.chart(svg2, data);
+            myChart.setBounds(75, 30, 480, 330);
+            var xAxis = myChart.addCategoryAxis("x", "Pclass");
+            // myChart.addPctAxis("y","Count");
+            myChart.addMeasureAxis("y","Count");
+            myChart.addSeries("Survived", dimple.plot.bar);
+            
+            myChart.addLegend(200, 10, 380, 20, "right");
+            myChart.draw();
+            });
+
+var title2 = d3.select("body")
+      .append("h6")
+      .text("(Passenger class a factor? : better comparison of people that did not survive (left) with the survived (right))");
+
+var svg3 = dimple.newSvg("body", 590, 400);
+
+        d3.csv("titanic_data.csv", function (error, data) {
+            // Create a column of 1s
+            data.forEach(function(d) {
+                return d.Count = 1;
+                        });
+            // data = dimple.filterData(data, "Survived", "0");
+            var myChart = new dimple.chart(svg3, data);
+            myChart.setBounds(75, 30, 480, 330);
+            var xAxis = myChart.addCategoryAxis("x", ["Pclass", "Survived"]);
+            // myChart.addPctAxis("y","Count");
+            myChart.addMeasureAxis("y","Count");
+            myChart.addSeries(null, dimple.plot.bar);
+            
+            myChart.addLegend(200, 10, 380, 20, "right");
+            myChart.draw();
+            });
+
+var conclusion1 = d3.select("body")
+      .append("h6")
+      .text("Conclusion : It is clear from the above charts that survival rate is higher for richer people (higher class)")
+      .style("color", "red");
+
+var title3 = d3.select("body").
+       append("h6")
+      .text("(Sex a factor? : Per cent of female and male survivors in each class)");
+
+var svg4 = dimple.newSvg("body", 590, 400);
+    d3.csv("titanic_data.csv", function (error, data){
+      //data = dimple.filterData(data, "Sex", ["female"])
+      var myChart = new dimple.chart(svg4, data);
+      myChart.setBounds(75, 30, 480, 330);
+      var xAxis = myChart.addCategoryAxis("x", "Pclass");
+      //xAxis.addOrderRule("");
+      myChart.addPctAxis("y", "Survived");
+      myChart.addSeries("Sex", dimple.plot.bar);
+      myChart.addLegend(65, 10, 510, 20, "right");
+      myChart.draw();      
+    });
+
+var title4 = d3.select("body").
+       append("h6")
+      .text("(Sex a factor? : Per cent of female and male among survived passengers in each class)");
+
+var svg5 = dimple.newSvg("body", 590, 400);
+        d3.csv("titanic_data.csv", function (error, data) {
+            // Create a column of 1s
+            data.forEach(function(d) {
+                return d.Count = 1;
+                        });
+            // data = dimple.filterData(data, "Survived", "0");
+            var myChart = new dimple.chart(svg5, data);
+            myChart.setBounds(75, 30, 480, 330);
+            var xAxis = myChart.addCategoryAxis("x", ["Pclass", "Survived"]);
+            // myChart.addPctAxis("y","Count");
+            myChart.addMeasureAxis("y","Count");
+            myChart.addSeries("Sex", dimple.plot.bar);
+            myChart.addLegend(200, 10, 380, 20, "right");
+            
+
+            myChart.draw();
+            });
+
+var conclusion2 = d3.select("body")
+      .append("h6")
+      .text("Conclusion: It is clear from the above charts that survival rate is higher for female as compared to men")
+      .style("color", "red");
+
+
+var title5 = d3.select("body").
+       append("h6")
+      .text("(Age a factor?: ratio of number of people that survived (pink) to those who did not survive (blue) in each age group)");
+
+var svg6 = dimple.newSvg("body", 590, 400);
+        d3.csv("titanic_data.csv", function (error, data) {
+            // age
+            data.forEach(function(d) {
+               d.count=1; 
+               d.AgeGroup = ( d.Age != "" && d.Age < 18 ?
+                            "Child (Age < 18)" : "Adult");
+                return d;
+                        });
+ 
+            // data = dimple.filterData(data, "Survived", "0");
+            var myChart = new dimple.chart(svg6, data);
+            myChart.setBounds(75, 30, 480, 330);
+            var xAxis = myChart.addCategoryAxis("x", "AgeGroup");
+            
+            myChart.addMeasureAxis("y","count");
+            myChart.addSeries("Survived", dimple.plot.bar);
+            myChart.addLegend(200, 10, 380, 20, "right");
+            
+            myChart.draw();
+            });
+
+var title6 = d3.select("body").
+       append("h6")
+      .text("(Age a factor?: better comparison of people that did not survive (left) with the survived (right)");
+
+var svg7 = dimple.newSvg("body", 590, 400);
+        d3.csv("titanic_data.csv", function (error, data) {
+            // age
+            data.forEach(function(d) {
+               d.count=1; 
+               d.AgeGroup = ( d.Age != "" && d.Age < 18 ?
+                            "Child (Age < 18)" : "Adult");
+                return d;
+                        });
+ 
+            // data = dimple.filterData(data, "Survived", "0");
+            var myChart = new dimple.chart(svg7, data);
+            myChart.setBounds(75, 30, 480, 330);
+            var xAxis = myChart.addCategoryAxis("x", ["AgeGroup", "Survived"]);
+            
+            myChart.addMeasureAxis("y","count");
+            myChart.addSeries(null, dimple.plot.bar);
+            myChart.addLegend(200, 10, 380, 20, "right");
+            
+            myChart.draw();
+            });
+
+var conclusion2 = d3.select("body")
+      .append("h6")
+      .text("Conclusion: It is clear from the above charts that survival rate is higher for children as compared to adults")
+      .style("color", "red");
+        </script>
+
+    </body>
+</html>
